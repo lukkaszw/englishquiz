@@ -8,6 +8,7 @@ export const typeDefs = gql`
 
   type Query {
     levels: [Level!]!
+    categories: [Category!]!
   }
 
   type Mutation {
@@ -21,5 +22,12 @@ export const typeDefs = gql`
   type Level implements Resource  {
     _id: String!
     name: String!
+    categories: [Category]!
+  }
+
+  type Category implements Resource {
+    _id: String!
+    name: String!
+    level: Level!
   }
 `;
