@@ -2,7 +2,7 @@ import { Schema, Types, Document, Model, model } from 'mongoose';
 
 export interface CategoryInputType {
   name: string,
-  level: Types.ObjectId | string,
+  level: string,
 }
 
 export interface CategoryValueType {
@@ -11,7 +11,10 @@ export interface CategoryValueType {
   level: string,
 }
 
-interface CategoryDocument extends Document, CategoryInputType {}
+interface CategoryDocument extends Document {
+  name: String,
+  level: Types.ObjectId,
+}
 
 interface CategoryModel extends Model<CategoryDocument> {}
 
@@ -24,6 +27,10 @@ const CategorySchema = new Schema<CategoryDocument, CategoryModel>({
     type: Schema.Types.ObjectId,
     ref: 'Level',
     required: true,
+  },
+  resourceType: {
+    type: String,
+    default: 'Category',
   }
 });
 

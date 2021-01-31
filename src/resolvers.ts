@@ -1,13 +1,17 @@
 import levelsController from './controllers/levels.controller';
 import categoriesController from './controllers/category.controller';
 
+interface Resource {
+  resourceType: String,
+}
+
 export const resolvers = {
   Query: {
     levels: levelsController.getLevels,
     categories: categoriesController.getCategories,
   },
   Mutation: {
-    
+    createLevel: levelsController.createLevel,
   },
   Level: {
     categories: levelsController.getLevelsCategories,
@@ -16,6 +20,9 @@ export const resolvers = {
     level: categoriesController.getCategoryLevel,
   },
   Resource: {
-    __resolveType: () => 'Resource',
+    __resolveType: (resource: Resource) => resource.resourceType,
+  },
+  MutationResponse: {
+    __resolveType: () => 'MutationResponse',
   }
 }

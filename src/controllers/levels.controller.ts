@@ -1,5 +1,9 @@
-import LevelModel, { LevelValueType } from '../models/level';
+import LevelModel, { LevelValueType, LevelInputType } from '../models/level';
 import CategoryModel from '../models/category';
+
+interface CreateLevelArgsInt {
+  input: LevelInputType,
+}
 
 const getLevels = async () => {
   try {
@@ -22,8 +26,26 @@ const getLevelsCategories = async (levelDoc: LevelValueType) => {
   }  
 }
 
+const createLevel = async (rootValue: any, { input }: CreateLevelArgsInt) => {
+  try {
+    const level = new LevelModel(input);
+    await level.save();
+    return {
+      success: true,
+      message: 'Level successfully created!',
+      level
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 
 export default {
   getLevels,
   getLevelsCategories,
+  createLevel,
 }

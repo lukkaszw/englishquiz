@@ -9,7 +9,9 @@ export interface LevelValueType {
   name: string,
 }
 
-interface LevelDocument extends Document, LevelInputType {};
+interface LevelDocument extends Document {
+  name: String,
+};
 
 interface LevelModel extends Model<LevelDocument> {}
 
@@ -18,6 +20,10 @@ const LevelSchema = new Schema<LevelDocument, LevelModel>({
     type: String,
     required: true,
   },
+  resourceType: {
+    type: String,
+    default: 'Level',
+  }
 });
 
 const LevelModel = model<LevelDocument, LevelModel>('Level', LevelSchema);
