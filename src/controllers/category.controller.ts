@@ -1,5 +1,9 @@
-import CategoryModel, { CategoryValueType } from '../models/category';
+import CategoryModel, { CategoryValueType, CategoryInputType } from '../models/category';
 import LevelModel from '../models/level';
+
+interface CreateCategoryArgsInt {
+  input: CategoryInputType,
+}
 
 const getCategories = async () => {
   try {
@@ -19,7 +23,25 @@ const getCategoryLevel = async (categoryValue: CategoryValueType) => {
   }
 }
 
+const createCategory = async (rootValue: any, { input }: CreateCategoryArgsInt) => {
+  try {
+    const category = new CategoryModel(input);
+    await category.save();
+    return {
+      success: true,
+      message: 'Category successfully created!',
+      category: category,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 export default {
   getCategories,
   getCategoryLevel,
+  createCategory,
 }

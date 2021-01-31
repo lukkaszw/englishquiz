@@ -12,6 +12,7 @@ export const resolvers = {
   },
   Mutation: {
     createLevel: levelsController.createLevel,
+    createCategory: categoriesController.createCategory,
   },
   Level: {
     categories: levelsController.getLevelsCategories,

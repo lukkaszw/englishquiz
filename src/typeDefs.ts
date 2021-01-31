@@ -13,10 +13,11 @@ export const typeDefs = gql`
 
   type Mutation {
     createLevel(input: LevelInput!): CreateLevelResponse!
+    createCategory(input: CategoryInput!): CreateCategoryResponse!
   }
 
   interface Resource {
-    _id: String!
+    _id: ID!
     resourceType: String!
   }
 
@@ -29,15 +30,20 @@ export const typeDefs = gql`
     name: String!
   }
 
+  input CategoryInput {
+    name: String!
+    level: ID!
+  }
+
   type Level implements Resource  {
-    _id: String!
+    _id: ID!
     name: String!
     categories: [Category]!
     resourceType: String!
   }
 
   type Category implements Resource {
-    _id: String!
+    _id: ID!
     name: String!
     level: Level!
     resourceType: String!
@@ -47,5 +53,11 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
     level: Level
-  }  
+  }
+
+  type CreateCategoryResponse implements MutationResponse {
+    success: Boolean!
+    message: String!
+    category: Category
+  }
 `;
