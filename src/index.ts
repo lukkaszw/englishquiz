@@ -1,6 +1,7 @@
-const { ApolloServer } = require('apollo-server');
-const { typeDefs } = require('./typeDefs.ts');
-const { resolvers } = require('./resolvers');
+import { ApolloServer } from 'apollo-server';
+import { typeDefs } from './typeDefs';
+import { resolvers } from './resolvers';
+import { db } from './database';
 
 const PORT = process.env.PORT || 5000;
 
@@ -17,6 +18,10 @@ const server = new ApolloServer({
   playground: true,
 });
 
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('Connected to database!');
+});
 
 server.listen({ port: PORT}).then(({ url }: any) => {
   console.log(url);
