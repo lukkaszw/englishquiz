@@ -15,6 +15,7 @@ export const resolvers = {
   Mutation: {
     createLevel: levelsController.createLevel,
     createCategory: categoriesController.createCategory,
+    createWord: wordController.createWord,
   },
   Level: {
     categories: levelsController.getLevelsCategories,
@@ -24,6 +25,7 @@ export const resolvers = {
   },
   Word: {
     category: wordController.getWordCategory,
+    sentences: wordController.getSentences,
   },
   Resource: {
     __resolveType: (resource: Resource) => resource.resourceType,

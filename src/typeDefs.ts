@@ -15,6 +15,7 @@ export const typeDefs = gql`
   type Mutation {
     createLevel(input: LevelInput!): CreateLevelResponse!
     createCategory(input: CategoryInput!): CreateCategoryResponse!
+    createWord(input: WordInput!): CreateWordResponse!
   }
 
   interface Resource {
@@ -29,6 +30,18 @@ export const typeDefs = gql`
 
   input GetWordsInput {
     categoryId: String!
+  }
+
+  input SentencesInput {
+    eng: [String]
+    pl: [String]
+  }
+
+  input WordInput {
+    eng: [String!]!
+    pl: [String!]!
+    category: ID!
+    sentences: SentencesInput
   }
 
   input LevelInput {
@@ -55,8 +68,8 @@ export const typeDefs = gql`
   }
 
   type Sentences {
-    eng: [String!]!,
-    pl: [String!]!,
+    eng: [String]
+    pl: [String]
   }
 
   type Word implements Resource {
@@ -78,5 +91,11 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
     category: Category
+  }
+
+  type CreateWordResponse implements MutationResponse {
+    success: Boolean!
+    message: String!
+    word: Word
   }
 `;

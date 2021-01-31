@@ -7,6 +7,7 @@ export interface WordInputType {
     eng: Array<string>
     pl: Array<string>
   }
+  category: string
 }
 
 
@@ -18,10 +19,10 @@ export interface WordValueType extends WordInputType {
 interface WordDocument extends Document {
   eng: Types.Array<string>
   pl: Types.Array<string>
-  sentences: {
+  sentences?: {
     eng: Types.Array<string>
     pl: Types.Array<string>
-  }
+  } | null
   category: Types.ObjectId
 }
 
@@ -43,14 +44,9 @@ const WordSchema = new Schema<WordDocument, WordModel>({
     required: true,
   },
   sentences: {
-    eng: [{
-      type: String,
-      required: true,
-    }],
-    pl: [{
-      type: String,
-      required: true,
-    }]
+    eng: [String],
+    pl: [String],
+    required: false,
   },
   category: {
     type: Schema.Types.ObjectId,
