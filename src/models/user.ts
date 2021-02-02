@@ -4,12 +4,12 @@ import bcrypt from 'bcryptjs';
 export interface UserInputType {
   login: string
   password: string
-  confirmPassword: string
+  confirmPassword?: string
 }
 
 export enum Role { ADMIN = 'ADMIN', USER = 'USER' };
 
-export interface USerValueType {
+export interface UserValueType {
   _id: string
   login: string
   password: string
@@ -24,7 +24,9 @@ interface UserDocument extends Document {
   password: string
 }
 
-interface UserModel extends Model<UserDocument> {}
+interface UserModel extends Model<UserDocument> {
+  findByCredentials: (LoginInput: UserInputType) => UserValueType 
+}
 
 const UserSchema = new Schema<UserDocument, UserModel>({
   login: {
@@ -43,6 +45,10 @@ const UserSchema = new Schema<UserDocument, UserModel>({
     type: Schema.Types.ObjectId,
     ref: 'Category',
   }],
+  resourceType: {
+    type: String,
+    default: 'User'
+  },
   role: {
     type: String,
     required: true,
@@ -50,6 +56,26 @@ const UserSchema = new Schema<UserDocument, UserModel>({
     default: 'USER',
   },
 });
+
+UserSchema.statics.findByCredentials = async (loginData: UserInputType) => {
+  const { login, password } = loginData;
+
+  const user:UserValueType = await UserModel.findOne({ login: { $eq: login }});
+
+  const errorMessage = 'Incorrect login or password!';
+
+  if(!user) {
+    throw new Error(errorMessage);
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if(!isMatch) {
+    throw new Error(errorMessage);
+  }
+
+  return user;
+}
 
 UserSchema.pre('save', async function (next) {
   const user = this;

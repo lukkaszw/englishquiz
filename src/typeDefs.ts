@@ -17,6 +17,7 @@ export const typeDefs = gql`
     createCategory(input: CategoryInput!): CreateCategoryResponse!
     createWord(input: WordInput!): CreateWordResponse!
     createUser(input: UserInput!): CreateUserResponse!
+    loginUser(input: UserLoginInput!): LoginUserResponse!
   }
 
   interface Resource {
@@ -58,6 +59,11 @@ export const typeDefs = gql`
     login: String!
     password: String!
     confirmPassword: String!
+  }
+
+  input UserLoginInput {
+    login: String!
+    password: String!
   }
 
   type Level implements Resource  {
@@ -118,5 +124,12 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
     user: User
+  }
+
+  type LoginUserResponse implements MutationResponse {
+    success: Boolean!
+    message: String!
+    user: User
+    token: String
   }
 `;

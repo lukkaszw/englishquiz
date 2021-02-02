@@ -1,8 +1,27 @@
-import UserModel, { UserInputType, USerValueType } from '../models/user';
+import UserModel, { UserInputType, UserValueType } from '../models/user';
 import CategoryModel from '../models/category';
 
-interface UserInputArgsInt {
+export interface UserInputArgsInt {
   input: UserInputType
+}
+
+const login = async (rootValue: any, { input }: UserInputArgsInt) => {
+  try {
+    const user = await UserModel.findByCredentials(input);
+
+    return {
+      success: true,
+      message: 'User successfully logged in!',
+      user,
+      token: 'token',
+    }
+    
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
 }
 
 const createUser = async (rootValue: any, { input }: UserInputArgsInt ) => {
@@ -36,7 +55,7 @@ const createUser = async (rootValue: any, { input }: UserInputArgsInt ) => {
   }
 }
 
-const getCompletedCategories = async (userValue: USerValueType ) => {
+const getCompletedCategories = async (userValue: UserValueType ) => {
   try {
     const categories = await CategoryModel.find({
       _id: {
@@ -53,5 +72,6 @@ const getCompletedCategories = async (userValue: USerValueType ) => {
 
 export default {
   createUser,
-  getCompletedCategories
+  getCompletedCategories,
+  login
 }
