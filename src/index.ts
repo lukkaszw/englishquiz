@@ -2,6 +2,9 @@ import { ApolloServer } from 'apollo-server';
 import { typeDefs } from './typeDefs';
 import { resolvers } from './resolvers';
 import { db } from './database';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
