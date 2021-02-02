@@ -1,6 +1,7 @@
 import levelsController from './controllers/levels.controller';
 import categoriesController from './controllers/category.controller';
 import wordController from './controllers/words.controller';
+import userController from './controllers/user.controller';
 
 interface Resource {
   resourceType: String,
@@ -16,6 +17,7 @@ export const resolvers = {
     createLevel: levelsController.createLevel,
     createCategory: categoriesController.createCategory,
     createWord: wordController.createWord,
+    createUser: userController.createUser,
   },
   Level: {
     categories: levelsController.getLevelsCategories,
@@ -26,6 +28,9 @@ export const resolvers = {
   Word: {
     category: wordController.getWordCategory,
     sentences: wordController.getSentences,
+  },
+  User: {
+    completedCat: userController.getCompletedCategories,
   },
   Resource: {
     __resolveType: (resource: Resource) => resource.resourceType,

@@ -16,6 +16,7 @@ export const typeDefs = gql`
     createLevel(input: LevelInput!): CreateLevelResponse!
     createCategory(input: CategoryInput!): CreateCategoryResponse!
     createWord(input: WordInput!): CreateWordResponse!
+    createUser(input: UserInput!): CreateUserResponse!
   }
 
   interface Resource {
@@ -53,6 +54,12 @@ export const typeDefs = gql`
     level: ID!
   }
 
+  input UserInput {
+    login: String!
+    password: String!
+    confirmPassword: String!
+  }
+
   type Level implements Resource  {
     _id: ID!
     name: String!
@@ -75,10 +82,18 @@ export const typeDefs = gql`
   type Word implements Resource {
     _id: ID!
     resourceType: String!
-    eng: [String!]!,
-    pl: [String!]!,
+    eng: [String!]!
+    pl: [String!]!
     sentences: Sentences
     category: Category!
+  }
+
+  type User implements Resource {
+    _id: ID!
+    resourceType: String!
+    login: String!
+    completedCat: [Category]!
+    role: String!
   }
 
   type CreateLevelResponse implements MutationResponse {
@@ -97,5 +112,11 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
     word: Word
+  }
+
+  type CreateUserResponse implements MutationResponse {
+    success: Boolean!
+    message: String!
+    user: User
   }
 `;
