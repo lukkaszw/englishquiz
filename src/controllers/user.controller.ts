@@ -9,11 +9,13 @@ const login = async (rootValue: any, { input }: UserInputArgsInt) => {
   try {
     const user = await UserModel.findByCredentials(input);
 
+    const token = user.generateAuthTokens();
+
     return {
       success: true,
       message: 'User successfully logged in!',
       user,
-      token: 'token',
+      token,
     }
     
   } catch (error) {

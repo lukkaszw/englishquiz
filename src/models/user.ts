@@ -1,5 +1,6 @@
 import { Schema, Types, Document, Model, model } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export interface UserInputType {
   login: string
@@ -18,14 +19,16 @@ export interface UserValueType {
 }
 
 interface UserDocument extends Document {
+  _id: Types.ObjectId,
   login: string,
   role: string,
   completedCat: Types.Array<string>
   password: string
+  generateAuthTokens: () => string
 }
 
 interface UserModel extends Model<UserDocument> {
-  findByCredentials: (LoginInput: UserInputType) => UserValueType 
+  findByCredentials: (LoginInput: UserInputType) => UserDocument 
 }
 
 const UserSchema = new Schema<UserDocument, UserModel>({
@@ -60,7 +63,7 @@ const UserSchema = new Schema<UserDocument, UserModel>({
 UserSchema.statics.findByCredentials = async (loginData: UserInputType) => {
   const { login, password } = loginData;
 
-  const user:UserValueType = await UserModel.findOne({ login: { $eq: login }});
+  const user:UserDocument = await UserModel.findOne({ login: { $eq: login }});
 
   const errorMessage = 'Incorrect login or password!';
 
@@ -75,6 +78,20 @@ UserSchema.statics.findByCredentials = async (loginData: UserInputType) => {
   }
 
   return user;
+}
+
+UserSchema.methods.generateAuthTokens = function () {
+  const user = this;
+
+  const secret = process.env.JWT_SECRET as string;
+
+
+
+  console.log('secretKey: ', secret);
+
+  const token = jwt.sign({ _id: user._id.toString() }, secret);
+
+  return token;
 }
 
 UserSchema.pre('save', async function (next) {
