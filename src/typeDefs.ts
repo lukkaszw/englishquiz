@@ -21,6 +21,7 @@ export const typeDefs = gql`
     updateCategory(categoryId: ID!, input: CategoryInput!): CategoryResponse!
     updateLevel(levelId: ID!, input: LevelInput!): LevelResponse!
     deleteLevel(levelId: ID!): LevelResponse!
+    deleteCategory(categoryId: ID!): CategoryResponse!
     loginUser(input: UserLoginInput!): LoginUserResponse!
   }
 

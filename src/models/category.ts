@@ -1,4 +1,5 @@
 import { Schema, Types, Document, Model, model } from 'mongoose';
+import WordModel from './word';
 
 export interface CategoryInputType {
   name: string,
@@ -36,6 +37,13 @@ const CategorySchema = new Schema<CategoryDocument, CategoryModel>({
     type: String,
     default: 'Category',
   }
+});
+
+CategorySchema.pre('remove', async function () {
+  const category = this;
+
+  await WordModel.deleteMany({ category: category._id });
+  
 });
 
 const CategoryModel = model<CategoryDocument, CategoryModel>('Category', CategorySchema);

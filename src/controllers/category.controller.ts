@@ -6,9 +6,12 @@ interface CreateCategoryArgsInt {
 }
 
 
-interface UpdateCategoryArgsInt extends CreateCategoryArgsInt {
-  categoryId: string
+interface CategoryIdArgsInt {
+  categoryId: string,
 }
+
+
+interface UpdateCategoryArgsInt extends CreateCategoryArgsInt, CategoryIdArgsInt {}
 
 const getCategories = async () => {
   try {
@@ -83,9 +86,34 @@ const updateCategory = async (rootValue: any, { categoryId, input }: UpdateCateg
   }
 }
 
+const deleteCategory = async (rootValue: any, { categoryId }: CategoryIdArgsInt) => {
+  try {
+    const category: CategoryDocument = await CategoryModel.findOne({ _id: categoryId });
+
+    if(!category) {
+      throw new Error('Category object not found!');
+    }
+
+    await category.remove();
+
+    return {
+      success: true,
+      message: 'Category has been successfully removed!',
+      category,
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 export default {
   getCategories,
   getCategoryLevel,
   createCategory,
   updateCategory,
+  deleteCategory,
 }

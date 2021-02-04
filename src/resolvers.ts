@@ -2,6 +2,7 @@ import levelsController from './controllers/levels.controller';
 import categoriesController from './controllers/category.controller';
 import wordController from './controllers/words.controller';
 import userController from './controllers/user.controller';
+import categoryController from './controllers/category.controller';
 
 interface Resource {
   resourceType: String,
@@ -24,7 +25,8 @@ export const resolvers = {
     updateWord: wordController.updateWord,
 
     deleteLevel: levelsController.deleteLevel,
-
+    deleteCategory: categoryController.deleteCategory,
+    
     loginUser: userController.login,
   },
   Level: {
