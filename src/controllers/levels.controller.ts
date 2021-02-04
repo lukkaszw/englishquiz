@@ -1,14 +1,17 @@
 import LevelModel, { LevelValueType, LevelInputType, LevelDocument } from '../models/level';
 import CategoryModel from '../models/category';
 import { resolvers } from '../resolvers';
+import { errorMonitor } from 'ws';
 
 interface CreateLevelArgsInt {
   input: LevelInputType,
 }
 
-interface UpdateLevelArgsInt extends CreateLevelArgsInt {
+interface LevelIdArgsInt {
   levelId: string,
 }
+
+interface UpdateLevelArgsInt extends CreateLevelArgsInt, LevelIdArgsInt {}
 
 const getLevels = async () => {
   try {
@@ -83,10 +86,35 @@ const updateLevel = async (rootValue: any, { levelId, input }: UpdateLevelArgsIn
   }
 }
 
+const deleteLevel = async (rootValue: any, { levelId }:LevelIdArgsInt) => {
+  try {
+    const level: LevelDocument = await LevelModel.findOne({ _id: levelId });
+
+    if(!level) {
+      throw new Error('Level object not found!');
+    }
+
+    await level.remove();
+
+    return {
+      success: true,
+      message: 'Level object has been removed!',
+      level
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 
 export default {
   getLevels,
   getLevelsCategories,
   createLevel,
   updateLevel,
+  deleteLevel,
 }

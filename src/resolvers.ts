@@ -22,6 +22,9 @@ export const resolvers = {
     updateLevel: levelsController.updateLevel,
     updateCategory: categoriesController.updateCategory,
     updateWord: wordController.updateWord,
+
+    deleteLevel: levelsController.deleteLevel,
+
     loginUser: userController.login,
   },
   Level: {

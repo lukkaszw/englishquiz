@@ -105,9 +105,6 @@ const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) 
       message: error.message,
     }
   }
-
-
-
 }
 
 export default {
