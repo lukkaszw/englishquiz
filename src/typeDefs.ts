@@ -22,6 +22,7 @@ export const typeDefs = gql`
     updateLevel(levelId: ID!, input: LevelInput!): LevelResponse!
     deleteLevel(levelId: ID!): LevelResponse!
     deleteCategory(categoryId: ID!): CategoryResponse!
+    deleteWord(wordId: ID!): WordResponse!
     loginUser(input: UserLoginInput!): LoginUserResponse!
   }
 

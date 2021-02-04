@@ -26,6 +26,7 @@ export const resolvers = {
 
     deleteLevel: levelsController.deleteLevel,
     deleteCategory: categoryController.deleteCategory,
+    deleteWord: wordController.deleteWord,
     
     loginUser: userController.login,
   },

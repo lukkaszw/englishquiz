@@ -11,9 +11,11 @@ interface CreateWordArgsInt {
   input: WordInputType
 }
 
-interface UpdateWordArgsInt extends CreateWordArgsInt {
+interface WordIdArgsInt {
   wordId: string
 }
+
+interface UpdateWordArgsInt extends CreateWordArgsInt, WordIdArgsInt {}
 
 const getWords = async (rootValue: any, { input }: GetWordsArgsInt) => {
   try {
@@ -107,10 +109,35 @@ const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) 
   }
 }
 
+const deleteWord = async (rootValue: any, { wordId }: WordIdArgsInt) => {
+  try {
+
+    const word: WordDocument = await WordModel.findOne({ _id: wordId });
+
+    if(!word) {
+      throw new Error('Word object not found!');
+    }
+
+    await word.remove();
+
+    return {
+      success: true,
+      message: 'Word object has been successfully removed!',
+      word
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 export default {
   getWords,
   getWordCategory,
   createWord,
   getSentences,
   updateWord,
+  deleteWord,
 }
