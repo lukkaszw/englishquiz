@@ -62,7 +62,6 @@ const createWord = async (rootValue: any, { input }: CreateWordArgsInt) => {
 }
 
 const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) => {
-  console.log(input)
 
   try {
     const allowedUpdates = ['pl', 'eng', 'sentences', 'category'];
@@ -75,7 +74,7 @@ const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) 
     const word = await WordModel.findOne({ _id: wordId });
 
     if(!word) {
-      throw new Error('Word object not found!')
+      throw new Error('Word object not found!');
     }
 
     dataKeys.forEach((key) => {

@@ -11,9 +11,9 @@ export interface CategoryValueType {
   level: string,
 }
 
-interface CategoryDocument extends Document {
-  name: String,
-  level: Types.ObjectId,
+export interface CategoryDocument extends Document {
+  name: string,
+  level: Types.ObjectId | string,
 }
 
 interface CategoryModel extends Model<CategoryDocument> {}
