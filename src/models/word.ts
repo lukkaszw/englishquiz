@@ -13,10 +13,9 @@ export interface WordInputType {
 
 export interface WordValueType extends WordInputType {
   _id: string,
-  category: string,
 }
 
-interface WordDocument extends Document {
+export interface WordDocument extends Document {
   eng: Types.Array<string>
   pl: Types.Array<string>
   sentences?: {

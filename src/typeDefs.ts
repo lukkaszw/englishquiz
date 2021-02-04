@@ -15,8 +15,9 @@ export const typeDefs = gql`
   type Mutation {
     createLevel(input: LevelInput!): CreateLevelResponse!
     createCategory(input: CategoryInput!): CreateCategoryResponse!
-    createWord(input: WordInput!): CreateWordResponse!
+    createWord(input: WordInput!): WordResponse!
     createUser(input: UserInput!): CreateUserResponse!
+    updateWord(wordId: ID!, input: WordInput!):  WordResponse!
     loginUser(input: UserLoginInput!): LoginUserResponse!
   }
 
@@ -114,7 +115,7 @@ export const typeDefs = gql`
     category: Category
   }
 
-  type CreateWordResponse implements MutationResponse {
+  type WordResponse implements MutationResponse {
     success: Boolean!
     message: String!
     word: Word

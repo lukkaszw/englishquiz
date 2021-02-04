@@ -18,6 +18,8 @@ export const resolvers = {
     createCategory: categoriesController.createCategory,
     createWord: wordController.createWord,
     createUser: userController.createUser,
+
+    updateWord: wordController.updateWord,
     loginUser: userController.login,
   },
   Level: {

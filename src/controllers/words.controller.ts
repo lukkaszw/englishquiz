@@ -1,4 +1,4 @@
-import WordModel, { WordValueType, WordInputType } from '../models/word';
+import WordModel, { WordValueType, WordInputType, WordDocument } from '../models/word';
 import CategoryModel from '../models/category';
 
 interface GetWordsArgsInt {
@@ -9,6 +9,10 @@ interface GetWordsArgsInt {
 
 interface CreateWordArgsInt {
   input: WordInputType
+}
+
+interface UpdateWordArgsInt extends CreateWordArgsInt {
+  wordId: string
 }
 
 const getWords = async (rootValue: any, { input }: GetWordsArgsInt) => {
@@ -39,7 +43,7 @@ const getSentences = (wordValue: WordValueType) => {
 const createWord = async (rootValue: any, { input }: CreateWordArgsInt) => {
 
   try {
-    const word = new WordModel(input);
+    const word: WordDocument = new WordModel(input);
     if(word.sentences?.eng.length === 0) {
       word.sentences = null;
     }
@@ -57,10 +61,60 @@ const createWord = async (rootValue: any, { input }: CreateWordArgsInt) => {
   }
 }
 
+const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) => {
+  console.log(input)
+
+  try {
+    const allowedUpdates = ['pl', 'eng', 'sentences', 'category'];
+    const dataKeys  = Object.keys(input);
+    const isMatch = dataKeys.every(key => allowedUpdates.includes(key));
+    if(!isMatch) {
+      throw new Error('Provide proper data!');
+    }    
+
+    const word = await WordModel.findOne({ _id: wordId });
+
+    if(!word) {
+      throw new Error('Word object not found!')
+    }
+
+    dataKeys.forEach((key) => {
+      if(key === 'eng' || key === 'pl') {
+        word[key] = input[key];
+      }
+
+      if(key === 'category') {
+        word[key] = input[key];
+      }
+
+      if(key === 'sentences') {
+        word[key] = input[key];
+      }
+    });
+
+    await word.save();
+
+    return {
+      success: true,
+      message: 'Word has been successfully updated!',
+      word
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+
+
+
+}
 
 export default {
   getWords,
   getWordCategory,
   createWord,
   getSentences,
+  updateWord,
 }
