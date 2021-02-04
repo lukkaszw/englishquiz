@@ -19,6 +19,7 @@ export const resolvers = {
     createWord: wordController.createWord,
     createUser: userController.createUser,
 
+    updateLevel: levelsController.updateLevel,
     updateCategory: categoriesController.updateCategory,
     updateWord: wordController.updateWord,
     loginUser: userController.login,

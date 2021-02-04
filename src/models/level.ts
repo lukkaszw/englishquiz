@@ -9,7 +9,7 @@ export interface LevelValueType {
   name: string,
 }
 
-interface LevelDocument extends Document {
+export interface LevelDocument extends Document {
   name: String,
 };
 
