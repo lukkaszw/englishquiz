@@ -1,16 +1,21 @@
 import { ApolloServer } from 'apollo-server';
+import { Request, Response } from 'express';
 import { typeDefs } from './typeDefs';
 import { resolvers } from './resolvers';
 import { db } from './database';
+import auth from './controllers/auth.controller';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 const PORT = process.env.PORT || 5000;
 
-const context = ({ req }: any) => ({
-  dataAccess: 'dataAccess',
-  currentUserId: '1',
+interface ContextRequest {
+  req: Request
+  res: Response
+}
+
+const context = async ({ req }: ContextRequest) => ({
+  user: await auth.authRequest(req.headers.authorization),
 });
 
 const server = new ApolloServer({

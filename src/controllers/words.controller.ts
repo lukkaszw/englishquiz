@@ -1,5 +1,6 @@
 import WordModel, { WordValueType, WordInputType, WordDocument } from '../models/word';
 import CategoryModel from '../models/category';
+import auth, { ContextReqInt } from './auth.controller';
 
 interface GetWordsArgsInt {
   input: {
@@ -42,9 +43,10 @@ const getSentences = (wordValue: WordValueType) => {
   return wordValue.sentences;
 }
 
-const createWord = async (rootValue: any, { input }: CreateWordArgsInt) => {
+const createWord = async (rootValue: any, { input }: CreateWordArgsInt, { user }: ContextReqInt) => {
 
   try {
+    auth.requiredAuthorizedAdmin(user);
     const word: WordDocument = new WordModel(input);
     if(word.sentences?.eng.length === 0) {
       word.sentences = null;
@@ -63,9 +65,10 @@ const createWord = async (rootValue: any, { input }: CreateWordArgsInt) => {
   }
 }
 
-const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) => {
+const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt, { user }: ContextReqInt) => {
 
   try {
+    auth.requiredAuthorizedAdmin(user);
     const allowedUpdates = ['pl', 'eng', 'sentences', 'category'];
     const dataKeys  = Object.keys(input);
     const isMatch = dataKeys.every(key => allowedUpdates.includes(key));
@@ -109,9 +112,9 @@ const updateWord = async (rootValue: any, { wordId, input }: UpdateWordArgsInt) 
   }
 }
 
-const deleteWord = async (rootValue: any, { wordId }: WordIdArgsInt) => {
+const deleteWord = async (rootValue: any, { wordId }: WordIdArgsInt, { user }: ContextReqInt) => {
   try {
-
+    auth.requiredAuthorizedAdmin(user);
     const word: WordDocument = await WordModel.findOne({ _id: wordId });
 
     if(!word) {

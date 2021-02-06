@@ -1,7 +1,6 @@
 import LevelModel, { LevelValueType, LevelInputType, LevelDocument } from '../models/level';
 import CategoryModel from '../models/category';
-import { resolvers } from '../resolvers';
-import { errorMonitor } from 'ws';
+import auth, { ContextReqInt } from './auth.controller';
 
 interface CreateLevelArgsInt {
   input: LevelInputType,
@@ -34,8 +33,9 @@ const getLevelsCategories = async (levelDoc: LevelValueType) => {
   }  
 }
 
-const createLevel = async (rootValue: any, { input }: CreateLevelArgsInt) => {
+const createLevel = async (rootValue: any, { input }: CreateLevelArgsInt, { user }: ContextReqInt) => {
   try {
+    auth.requiredAuthorizedAdmin(user);
     const level = new LevelModel(input);
     await level.save();
     return {
@@ -51,9 +51,10 @@ const createLevel = async (rootValue: any, { input }: CreateLevelArgsInt) => {
   }
 }
 
-const updateLevel = async (rootValue: any, { levelId, input }: UpdateLevelArgsInt) => {
-  try {
+const updateLevel = async (rootValue: any, { levelId, input }: UpdateLevelArgsInt, { user }: ContextReqInt) => {
 
+  try {
+    auth.requiredAuthorizedAdmin(user);
     const allowedUpdates = ['name'];
     const dataKeys  = Object.keys(input);
     const isMatch = dataKeys.every(key => allowedUpdates.includes(key));
@@ -86,8 +87,9 @@ const updateLevel = async (rootValue: any, { levelId, input }: UpdateLevelArgsIn
   }
 }
 
-const deleteLevel = async (rootValue: any, { levelId }:LevelIdArgsInt) => {
+const deleteLevel = async (rootValue: any, { levelId }:LevelIdArgsInt, { user }: ContextReqInt) => {
   try {
+    auth.requiredAuthorizedAdmin(user);
     const level: LevelDocument = await LevelModel.findOne({ _id: levelId });
 
     if(!level) {

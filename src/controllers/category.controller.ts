@@ -1,5 +1,6 @@
 import CategoryModel, { CategoryValueType, CategoryInputType, CategoryDocument } from '../models/category';
 import LevelModel from '../models/level';
+import auth, { ContextReqInt } from './auth.controller';
 
 interface CreateCategoryArgsInt {
   input: CategoryInputType,
@@ -9,7 +10,6 @@ interface CreateCategoryArgsInt {
 interface CategoryIdArgsInt {
   categoryId: string,
 }
-
 
 interface UpdateCategoryArgsInt extends CreateCategoryArgsInt, CategoryIdArgsInt {}
 
@@ -31,8 +31,9 @@ const getCategoryLevel = async (categoryValue: CategoryValueType) => {
   }
 }
 
-const createCategory = async (rootValue: any, { input }: CreateCategoryArgsInt) => {
+const createCategory = async (rootValue: any, { input }: CreateCategoryArgsInt, { user }: ContextReqInt) => {
   try {
+    auth.requiredAuthorizedAdmin(user);
     const category = new CategoryModel(input);
     await category.save();
     return {
@@ -48,8 +49,9 @@ const createCategory = async (rootValue: any, { input }: CreateCategoryArgsInt) 
   }
 }
 
-const updateCategory = async (rootValue: any, { categoryId, input }: UpdateCategoryArgsInt) => {
+const updateCategory = async (rootValue: any, { categoryId, input }: UpdateCategoryArgsInt,  { user }: ContextReqInt) => {
   try {
+    auth.requiredAuthorizedAdmin(user);
     const allowedUpdates = ['name', 'level'];
     const dataKeys  = Object.keys(input);
     const isMatch = dataKeys.every(key => allowedUpdates.includes(key));
@@ -86,8 +88,9 @@ const updateCategory = async (rootValue: any, { categoryId, input }: UpdateCateg
   }
 }
 
-const deleteCategory = async (rootValue: any, { categoryId }: CategoryIdArgsInt) => {
+const deleteCategory = async (rootValue: any, { categoryId }: CategoryIdArgsInt, { user }: ContextReqInt) => {
   try {
+    auth.requiredAuthorizedAdmin(user);
     const category: CategoryDocument = await CategoryModel.findOne({ _id: categoryId });
 
     if(!category) {

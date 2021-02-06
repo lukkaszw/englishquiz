@@ -18,7 +18,7 @@ export interface UserValueType {
   role: Role
 }
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
   _id: Types.ObjectId,
   login: string,
   role: string,
@@ -89,7 +89,7 @@ UserSchema.methods.generateAuthTokens = function () {
 
   console.log('secretKey: ', secret);
 
-  const token = jwt.sign({ _id: user._id.toString() }, secret);
+  const token = jwt.sign({ _id: user._id.toString() }, secret, { expiresIn: '15m' });
 
   return token;
 }
