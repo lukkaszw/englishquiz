@@ -21,6 +21,9 @@ export const typeDefs = gql`
     updateCategory(categoryId: ID!, input: CategoryInput!): CategoryResponse!
     updateLevel(levelId: ID!, input: LevelInput!): LevelResponse!
     updateUserLogin(input: UserLoginUpdate!): UserResponse!
+    updateUserPassword(input: UserUpdatePasswordInput!): UpdatePasswordResponse!
+    setCategoryCompleted(categoryId: ID!): UserResponse!
+    setCategoryUncompleted(categoryId: ID!): UserResponse!
     deleteLevel(levelId: ID!): LevelResponse!
     deleteCategory(categoryId: ID!): CategoryResponse!
     deleteWord(wordId: ID!): WordResponse!
@@ -76,6 +79,12 @@ export const typeDefs = gql`
   input UserLoginInput {
     login: String!
     password: String!
+  }
+
+  input UserUpdatePasswordInput {
+    password: String!
+    newPassword: String!
+    confirmPassword: String!
   }
 
   type Level implements Resource  {
@@ -136,6 +145,11 @@ export const typeDefs = gql`
     success: Boolean!
     message: String!
     user: User
+  }
+
+  type UpdatePasswordResponse implements MutationResponse {
+    success: Boolean!
+    message: String!
   }
 
   type LoginUserResponse implements MutationResponse {

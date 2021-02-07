@@ -24,10 +24,14 @@ export const resolvers = {
     updateCategory: categoriesController.updateCategory,
     updateWord: wordController.updateWord,
     updateUserLogin: userController.updateUserLogin,
+    updateUserPassword: userController.updateUserPassword,
 
     deleteLevel: levelsController.deleteLevel,
     deleteCategory: categoryController.deleteCategory,
     deleteWord: wordController.deleteWord,
+
+    setCategoryCompleted: categoryController.setCategoryCompleted,
+    setCategoryUncompleted: categoryController.setCategoryUncompleted,
     
     loginUser: userController.login,
   },

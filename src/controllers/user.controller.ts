@@ -6,6 +6,15 @@ export interface UserInputArgsInt {
   input: UserInputType
 }
 
+interface UpdatePasswordIntType extends UserInputType {
+  newPassword: string
+  confirmPassword: string
+}
+
+export interface UpdatePasswordArgsInt extends UserInputArgsInt {
+  input: UpdatePasswordIntType
+}
+
 const login = async (rootValue: any, { input }: UserInputArgsInt) => {
   try {
     const user = await UserModel.findByCredentials(input);
@@ -98,10 +107,37 @@ const updateUserLogin = async (rootValue: any, { input }: UserInputArgsInt, { us
   }
 }
 
+const updateUserPassword = async (rootValue: any, { input }: UpdatePasswordArgsInt, { user }: ContextReqInt) => {
+  try {
+    auth.requireAuthorizedUser(user);
+    const userObj = await UserModel.findByCredentials({ login: user.login, password: input.password });
+
+    if(input.newPassword !== input.confirmPassword) {
+      throw new Error('New passwords must match!');
+    }
+
+    userObj.password = input.newPassword;
+
+    await userObj.save();
+
+    return {
+      success: true,
+      message: 'Password has been updated!',
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 
 export default {
   createUser,
   getCompletedCategories,
   login,
   updateUserLogin,
+  updateUserPassword,
 }

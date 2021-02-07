@@ -113,10 +113,66 @@ const deleteCategory = async (rootValue: any, { categoryId }: CategoryIdArgsInt,
   }
 }
 
+const setCategoryCompleted = async (rootValue: any, { categoryId }: CategoryIdArgsInt, { user }: ContextReqInt) => {
+  try {
+    auth.requireAuthorizedUser(user);
+    const category = await CategoryModel.findOne({ _id: categoryId });
+    if(!category) {
+      throw new Error('Category not found!');
+    }
+
+    if(!user.completedCat.includes(categoryId)) {
+      user.completedCat.push(categoryId);
+      await user.save();
+    }
+
+
+    return {
+      success: true,
+      message: 'Category set as completed correctly!',
+      user,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
+const setCategoryUncompleted = async (rootValue: any, { categoryId }: CategoryIdArgsInt, { user }: ContextReqInt) => {
+  try {
+    auth.requireAuthorizedUser(user);
+    const category = await CategoryModel.findOne({ _id: categoryId });
+    if(!category) {
+      throw new Error('Category not found!');
+    }
+
+    if(user.completedCat.includes(categoryId)) {
+      user.completedCat.filter(catId => catId !== categoryId);
+      await user.save();
+    }
+
+
+    return {
+      success: true,
+      message: 'Category set as uncompleted correctly!',
+      user,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 export default {
   getCategories,
   getCategoryLevel,
   createCategory,
   updateCategory,
   deleteCategory,
+  setCategoryCompleted,
+  setCategoryUncompleted,
 }
