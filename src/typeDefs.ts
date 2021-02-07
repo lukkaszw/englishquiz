@@ -16,10 +16,11 @@ export const typeDefs = gql`
     createLevel(input: LevelInput!): LevelResponse!
     createCategory(input: CategoryInput!): CategoryResponse!
     createWord(input: WordInput!): WordResponse!
-    createUser(input: UserInput!): CreateUserResponse!
+    createUser(input: UserInput!): UserResponse!
     updateWord(wordId: ID!, input: WordInput!):  WordResponse!
     updateCategory(categoryId: ID!, input: CategoryInput!): CategoryResponse!
     updateLevel(levelId: ID!, input: LevelInput!): LevelResponse!
+    updateUserLogin(input: UserLoginUpdate!): UserResponse!
     deleteLevel(levelId: ID!): LevelResponse!
     deleteCategory(categoryId: ID!): CategoryResponse!
     deleteWord(wordId: ID!): WordResponse!
@@ -65,6 +66,11 @@ export const typeDefs = gql`
     login: String!
     password: String!
     confirmPassword: String!
+  }
+
+  input UserLoginUpdate {
+    login: String!
+    password: String!
   }
 
   input UserLoginInput {
@@ -126,7 +132,7 @@ export const typeDefs = gql`
     word: Word
   }
 
-  type CreateUserResponse implements MutationResponse {
+  type UserResponse implements MutationResponse {
     success: Boolean!
     message: String!
     user: User

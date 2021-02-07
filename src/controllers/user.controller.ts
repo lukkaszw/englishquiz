@@ -1,5 +1,6 @@
 import UserModel, { UserInputType, UserValueType } from '../models/user';
 import CategoryModel from '../models/category';
+import auth, { ContextReqInt } from './auth.controller';
 
 export interface UserInputArgsInt {
   input: UserInputType
@@ -35,7 +36,7 @@ const createUser = async (rootValue: any, { input }: UserInputArgsInt ) => {
       throw new Error('Please complete registration form correctly!');
     }
     
-    if(input.password !== input.confirmPassword) {
+    if(password !== confirmPassword) {
       throw new Error("Password and confirm password don't match!");
     }
 
@@ -71,9 +72,36 @@ const getCompletedCategories = async (userValue: UserValueType ) => {
   }
 }
 
+const updateUserLogin = async (rootValue: any, { input }: UserInputArgsInt, { user }: ContextReqInt ) => {
+  try {
+    auth.requireAuthorizedUser(user);
+    const userObj = await UserModel.findByCredentials({ login: user.login, password: input.password });
+    if(!userObj) {
+      throw new Error('Incorrect password!');
+    }
+
+    userObj.login = input.login;
+
+    await userObj.save();
+
+    return {
+      success: true,
+      message: 'Login has been correctly updated!',
+      user: userObj,
+    }
+
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    }
+  }
+}
+
 
 export default {
   createUser,
   getCompletedCategories,
-  login
+  login,
+  updateUserLogin,
 }
