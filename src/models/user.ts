@@ -85,10 +85,6 @@ UserSchema.methods.generateAuthTokens = function () {
 
   const secret = process.env.JWT_SECRET as string;
 
-
-
-  console.log('secretKey: ', secret);
-
   const token = jwt.sign({ _id: user._id.toString() }, secret, { expiresIn: '15m' });
 
   return token;
