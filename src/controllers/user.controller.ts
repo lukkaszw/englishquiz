@@ -53,10 +53,13 @@ const createUser = async (rootValue: any, { input }: UserInputArgsInt ) => {
 
     await user.save();
 
+    const token = user.generateAuthTokens();
+
     return {
       success: true,
       message: 'User account was created successfully!',
-      user
+      user,
+      token
     }
 
   } catch (error) {
