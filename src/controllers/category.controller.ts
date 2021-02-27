@@ -149,7 +149,7 @@ const setCategoryUncompleted = async (rootValue: any, { categoryId }: CategoryId
     }
 
     if(user.completedCat.includes(categoryId)) {
-      user.completedCat.filter(catId => catId !== categoryId);
+      user.completedCat.pull(categoryId);
       await user.save();
     }
 
