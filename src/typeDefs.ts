@@ -10,6 +10,7 @@ export const typeDefs = gql`
     levels: [Level!]!
     categories: [Category!]!
     words(input: GetWordsInput!): [Word!]!
+    user: User
   }
 
   type Mutation {

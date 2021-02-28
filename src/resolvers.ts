@@ -13,6 +13,7 @@ export const resolvers = {
     levels: levelsController.getLevels,
     categories: categoriesController.getCategories,
     words: wordController.getWords,
+    user: userController.getUserData,
   },
   Mutation: {
     createLevel: levelsController.createLevel,

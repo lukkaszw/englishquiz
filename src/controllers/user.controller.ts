@@ -70,6 +70,15 @@ const createUser = async (rootValue: any, { input }: UserInputArgsInt ) => {
   }
 }
 
+const getUserData = async (rootValue: any, input: any, { user }: ContextReqInt) => {
+  try {
+    auth.requireAuthorizedUser(user);
+    return user;
+  } catch (error) {
+    return error;
+  }
+}
+
 const getCompletedCategories = async (userValue: UserValueType ) => {
   try {
     const categories = await CategoryModel.find({
@@ -141,6 +150,7 @@ export default {
   createUser,
   getCompletedCategories,
   login,
+  getUserData,
   updateUserLogin,
   updateUserPassword,
 }
